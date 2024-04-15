@@ -1,0 +1,106 @@
+{
+  "stats": {
+    "suites": 0,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-04-15T01:49:32.849Z",
+    "end": "2024-04-15T01:49:32.904Z",
+    "duration": 55,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+      "title": "",
+      "fullFile": "cypress/e2e/readwritefilesdemo.cy.ts",
+      "file": "cypress/e2e/readwritefilesdemo.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+        {
+          "title": "Read files using fixture",
+          "fullTitle": "Read files using fixture",
+          "timedOut": null,
+          "duration": 21,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "cy.fixture('example').then(function (data) {\n    cy.log(data.name);\n    cy.log(data.email);\n});\ncy.fixture('example').its('name').should('eq', 'Welcome to JRNI/Appointmetns');\n//  cy.log(this.test_data)",
+          "err": {},
+          "uuid": "4bec4d07-e8d5-48cb-af5d-f514b419eaf0",
+          "parentUUID": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+          "isHook": false,
+          "skipped": false
+        },
+        {
+          "title": "Write file demo",
+          "fullTitle": "Write file demo",
+          "timedOut": null,
+          "duration": 6,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "// cy.writeFile('example',{test: 'test'})\n// cy.writeFile('example',{test: 'test123'}, {flag: 'a+'})",
+          "err": {},
+          "uuid": "9607bc1f-a5ef-4e6a-b0b1-cf9ab1b3259f",
+          "parentUUID": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+          "isHook": false,
+          "skipped": false
+        }
+      ],
+      "suites": [],
+      "passes": [
+        "4bec4d07-e8d5-48cb-af5d-f514b419eaf0",
+        "9607bc1f-a5ef-4e6a-b0b1-cf9ab1b3259f"
+      ],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 27,
+      "root": true,
+      "rootEmpty": false,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "charts": true,
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "reportDir": "cypress/results"
+      },
+      "version": "6.2.0"
+    }
+  }
+}

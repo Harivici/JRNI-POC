@@ -10,6 +10,8 @@
     "@types/node": "^16.18.89",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
+    "fs-extra": "^11.2.0",
+    "mochawesome-report-generator": "^6.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -19,8 +21,21 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "unit-test": "react-scripts test",
+    "eject": "react-scripts eject",
+
+    "cypress:open": "cypress open",
+    "cy-test": "cypress run",
+    "posttest": "echo post test",
+
+    "delete:reports": "rm cypress/results/* || true && rm -r mochawesome-report || true && rm mochawesome.json",
+    "pretest": "npm run delete:reports",
+    "cy-reports": "cypress run --reporter mochawesome",
+    "merge-reports": "mochawesome-merge 'cypress/results/*.json' > mochawesome.json",
+    "report-json": "marge mochawesome.json",
+    "generate-htmlreport": "npm run cy-reports && npm run merge-reports && npm run report-json",
+
+    "cy:run": "node scripts/cypress.js"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +54,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^13.7.1",
+    "eslint-plugin-cypress": "^2.15.1",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0"
   }
 }

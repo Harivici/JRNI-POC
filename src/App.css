@@ -1,38 +1,139 @@
 .App {
   text-align: center;
+  padding:2%
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.ButtonsContainer { 
+  display: flex;
+  gap: 50px;
+  justify-content: space-around;
+  flex-direction: column;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+div[data-lastpass-icon-root] {
+  display: none;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.DisplayServices {
+  padding: 20px;
+  font-size: 18px;
+  margin: auto;
+}
+.ServicesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: auto;
+  
+}
+.ServiceTitle {
+  width: 100%
+}
+.ServiceItem {
+  display: flex;
+  font-size: 20px;
+  font-weight: 700;
+}
+.ServiceDuration {
+  text-align: left;
+}
+.ServiceDiv {
+  display: flex;
+  border: 1px solid #a48d53;
+  box-shadow: 0 3px 4px 0 blue;
+  cursor: pointer;
+  padding: 16px;
+  width: 200px;
+  margin: auto;
+  justify-content: center;
+  flex-direction: column
+}
+.ServiceTimesContainer {
+  display: flex;
+  gap: 20px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.ServiceColor {
+  color: red;
+}
+.SlotContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+}
+.LabelContainer {
+  display: flex;
+  width: 385px;
+}
+.DayLabel {
+  font-size: 20px;
+  font-weight: 700;
+}
+.DayColor {
+  color: green;
+}
+.SelectionContainer {
+  display: flex;
+  flex: 1
+}
+.SelectionTimes {
+  margin: auto;
+  font-size: 20px;
+}
+.ServiceTimeButton {
+  padding: 20px;
+  font-size: 18px;
+}
+.DeleteTimeSlotBasket {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+.ClientFormWrapper {
+  display: flex;
+  gap: 5px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.ClientFormContainer {
   display: flex;
   flex-direction: column;
+  gap: 10px
+}
+.ClientInputWrapper {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 10px;
 }
-
-.App-link {
-  color: #61dafb;
+.ClientInput {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.CheckoutVerifyContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.CheckoutVerifyWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.ConfirmContainer {
+  display: flex;
+  flex-direction: column;
+}
+.ConfirmTitle {
+  color: green;
+  text-align: center
+}
+.ConfirmEmail {
+  color: blue;
+}
+.TextCenter {
+  text-align: center;
 }
