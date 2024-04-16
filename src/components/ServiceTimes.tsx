@@ -65,6 +65,7 @@ export const ServiceTimes: React.FC<Props> = ({
                 })}
               </select>
               <svg
+              id="svg"
                 onClick={() => {
                   console.log("on change event");
                 }}
