@@ -1,5 +1,4 @@
 import "../App.css";
-// import { UserInfo } from './App'
 
 interface Props {
   bookingInfo: any;
@@ -9,13 +8,11 @@ interface Props {
 export const Checkout: React.FC<Props> = ({ bookingInfo, checkout }) => {
   return (
     <div className="ClientContainer">
-      <h1 className="TextCenter">
+      <h5 className="TextCenter">
         6.Please verify your selected service bookings.
-      </h1>
+      </h5>
       <div className="CheckoutVerifyContainer">
-        <div
-          className="CheckoutVerifyWrapper"
-        >
+        <div className="CheckoutVerifyWrapper">
           <p>Service: {bookingInfo.selectedService.name}</p>
           <p>
             Method of Appointment:{" "}
@@ -25,7 +22,7 @@ export const Checkout: React.FC<Props> = ({ bookingInfo, checkout }) => {
             price:{" "}
             {bookingInfo.selectedService.prices[0] === 0
               ? "Free"
-              : `$${(bookingInfo.selectedService.prices[0]/100).toFixed(2)}`}
+              : `$${(bookingInfo.selectedService.prices[0] / 100).toFixed(2)}`}
           </p>
           <p>
             Selected Date:{" "}
@@ -46,10 +43,7 @@ export const Checkout: React.FC<Props> = ({ bookingInfo, checkout }) => {
             {`+${bookingInfo.clientData.mobile_prefix} ${bookingInfo.clientData.mobile}`}
           </p>
         </div>
-        <button
-          onClick={checkout}
-          className="DisplayServices"
-        >
+        <button onClick={checkout} className="DisplayServices Btn">
           6.Book Now
         </button>
       </div>

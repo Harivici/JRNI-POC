@@ -5,9 +5,9 @@
     "passes": 2,
     "pending": 0,
     "failures": 0,
-    "start": "2024-04-15T01:49:32.849Z",
-    "end": "2024-04-15T01:49:32.904Z",
-    "duration": 55,
+    "start": "2024-04-16T06:13:13.598Z",
+    "end": "2024-04-16T06:13:13.654Z",
+    "duration": 56,
     "testsRegistered": 2,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+      "uuid": "cd003f25-a7d2-4f94-b15b-3eae954f030f",
       "title": "",
       "fullFile": "cypress/e2e/readwritefilesdemo.cy.ts",
       "file": "cypress/e2e/readwritefilesdemo.cy.ts",
@@ -38,8 +38,8 @@
           "context": null,
           "code": "cy.fixture('example').then(function (data) {\n    cy.log(data.name);\n    cy.log(data.email);\n});\ncy.fixture('example').its('name').should('eq', 'Welcome to JRNI/Appointmetns');\n//  cy.log(this.test_data)",
           "err": {},
-          "uuid": "4bec4d07-e8d5-48cb-af5d-f514b419eaf0",
-          "parentUUID": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+          "uuid": "5f8109c4-963b-4942-92b4-fc8f7c14cbc6",
+          "parentUUID": "cd003f25-a7d2-4f94-b15b-3eae954f030f",
           "isHook": false,
           "skipped": false
         },
@@ -47,7 +47,7 @@
           "title": "Write file demo",
           "fullTitle": "Write file demo",
           "timedOut": null,
-          "duration": 6,
+          "duration": 5,
           "state": "passed",
           "speed": "fast",
           "pass": true,
@@ -56,21 +56,21 @@
           "context": null,
           "code": "// cy.writeFile('example',{test: 'test'})\n// cy.writeFile('example',{test: 'test123'}, {flag: 'a+'})",
           "err": {},
-          "uuid": "9607bc1f-a5ef-4e6a-b0b1-cf9ab1b3259f",
-          "parentUUID": "48ceff9a-d014-4988-8c98-50f59c2d493c",
+          "uuid": "d291a25c-77ed-422e-ac01-0a288ab68b44",
+          "parentUUID": "cd003f25-a7d2-4f94-b15b-3eae954f030f",
           "isHook": false,
           "skipped": false
         }
       ],
       "suites": [],
       "passes": [
-        "4bec4d07-e8d5-48cb-af5d-f514b419eaf0",
-        "9607bc1f-a5ef-4e6a-b0b1-cf9ab1b3259f"
+        "5f8109c4-963b-4942-92b4-fc8f7c14cbc6",
+        "d291a25c-77ed-422e-ac01-0a288ab68b44"
       ],
       "failures": [],
       "pending": [],
       "skipped": [],
-      "duration": 27,
+      "duration": 26,
       "root": true,
       "rootEmpty": false,
       "_timeout": 2000

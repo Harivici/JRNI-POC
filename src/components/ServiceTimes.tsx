@@ -27,28 +27,20 @@ export const ServiceTimes: React.FC<Props> = ({
 }) => {
   return (
     <div className="ServiceTimesContainer">
-      <h1>
+      <h5>
         3.Choose a time slot for
         <span className="ServiceColor">{` ${selectedService.name} `}</span>
         service to add into basket:
-      </h1>
+      </h5>
 
       {timeSlots.map((slot: any) => {
         const localDateVal = slot.date.toLocaleDateString();
         return (
-          <div
-            key={slot.day}
-            className="SlotContainer"
-          >
+          <div key={slot.day} className="SlotContainer">
             <div className="LabelContainer">
-              <label
-                htmlFor="time-select"
-                className="DayLabel"
-              >
+              <label htmlFor="time-select" className="DayLabel">
                 Choose{" "}
-                <span
-                  className="DayColor"
-                >{`${slot.day} on ${localDateVal}`}</span>{" "}
+                <span className="DayColor">{`${slot.day} on ${localDateVal}`}</span>{" "}
                 time:
               </label>
             </div>
@@ -72,25 +64,39 @@ export const ServiceTimes: React.FC<Props> = ({
                   );
                 })}
               </select>
+              <svg
+                onClick={() => {
+                  console.log("on change event");
+                }}
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fal"
+                data-icon="chevron-down"
+                className="svg-inline--fa fa-chevron-down fa-w-14 f1ngfyag f19cwxkv f1276t1q"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z"
+                ></path>
+              </svg>
             </div>
           </div>
         );
       })}
       <button
         onClick={addItemIntoBasket}
-        className="ServiceTimeButton"
+        className="ServiceTimeButton Btn"
         disabled={!selectedTimeSlot || basketServiceItem}
       >
         4.Add time slot into Basket
       </button>
-      <div className='DeleteTimeSlotBasket'
-        style={{
-          
-        }}
-      >
+      <div className="DeleteTimeSlotBasket" style={{}}>
         <button
           onClick={deleteItemInBasket}
-          className="ServiceTimeButton"
+          className="ServiceTimeButton Btn"
           disabled={!selectedTimeSlot || !basketServiceItem}
         >
           Delete time slot from Basket
@@ -99,13 +105,13 @@ export const ServiceTimes: React.FC<Props> = ({
           onClick={() => {
             setStep("client details");
           }}
-          className="ServiceTimeButton"
+          className="ServiceTimeButton Btn"
           disabled={!basketServiceItem}
         >
           Proceed to Client Details
         </button>
         <button
-          className="ServiceTimeButton"
+          className="ServiceTimeButton Btn"
           onClick={() => {
             setServiceTimes(null);
             setServices(null);

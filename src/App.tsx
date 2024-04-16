@@ -235,12 +235,16 @@ const App = () => {
   return (
     <div className="App">
       {/* <img src={Vcxlogo} alt="Vcx Logo" /> <br /> */}
-      <h1>{`${
+      <h1 className="H1">{`${
         services ? "" : "Welcome to"
       } ${COMPANY_NAME}(${COMPANY_ID}) JRNI appointments/services`}</h1>
       <br />
       {step === "welcome" && (
-        <Landing companyId={COMPANY_ID} companyName={COMPANY_NAME} getServices={getServices} />
+        <Landing
+          companyId={COMPANY_ID}
+          companyName={COMPANY_NAME}
+          getServices={getServices}
+        />
       )}
       {step === "services" && (
         <Services
