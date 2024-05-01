@@ -1,13 +1,20 @@
 import "../App.css";
+import { Spinner } from "./Spinner";
 
 interface Props {
   bookingInfo: any;
   checkout: () => void;
+  serviceLoading: boolean;
 }
 
-export const Checkout: React.FC<Props> = ({ bookingInfo, checkout }) => {
+export const Checkout: React.FC<Props> = ({
+  bookingInfo,
+  checkout,
+  serviceLoading,
+}) => {
   return (
     <div className="ClientContainer">
+      {serviceLoading && <Spinner message="...Booking service" />}
       <h5 className="TextCenter">
         6.Please verify your selected service bookings.
       </h5>

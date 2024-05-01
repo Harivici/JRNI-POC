@@ -56,6 +56,9 @@ const App = () => {
   const [checkoutResp, setCheckoutResp] = useState<any>(null);
   const [userInfo, setUserInfo] = useState<UserInfo>(UserInitialInfo);
   const [step, setStep] = useState("");
+  const [staff, setStaff] = useState<any>(null);
+  const [selectedStaff, setSelectedStaff] = useState<any>(null);
+  const [serviceLoading, setServiceLoading] = useState(false);
 
   useEffect(() => {
     setStep("welcome");
@@ -79,6 +82,7 @@ const App = () => {
     });
 
   const getServices = async () => {
+    setServiceLoading(true);
     setServices(null);
     setCheckoutResp(null);
     const url = `${API_URL}/api/v5/${COMPANY_ID}/services/?exclude_links[]=child_services&availability[]=0`;
@@ -90,23 +94,71 @@ const App = () => {
     setServices(serviceResp);
     setStep("services");
     setSelectedService(null);
+    setServiceLoading(false);
   };
 
-  const getServiceTimes = async (item: any) => {
+  const getServiceDetails = async (item: any) => {
+    setServiceLoading(true);
+    const url = `${API_URL}/api/v5/${COMPANY_ID}/services/${item.id}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    await res.json();
+    setServiceLoading(true);
+  };
+
+  const getServicePeopleItemDetails = async (item: any) => {
+    const url = `${API_URL}/api/v5/${COMPANY_ID}/items?service_id=${item.global_id}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    const servicePeopleItemDetailsResp = await res.json();
+    const staffResp =
+      servicePeopleItemDetailsResp &&
+      (await Promise.all(
+        servicePeopleItemDetailsResp?._embedded?.items?.map(
+          async (item: any) => {
+            return getServicePeopleDetails(item.person_item_id);
+          }
+        )
+      ));
+    staffResp && setStaff(staffResp);
+  };
+
+  const getServicePeopleDetails = async (pepoleId: number) => {
+    const url = `${API_URL}/api/v5/${COMPANY_ID}/people/${pepoleId}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    const servicePeopleDetailsResp = await res.json();
+    return servicePeopleDetailsResp;
+  };
+
+  const getServiceTimes = async (item: any, staff?: any) => {
+    setServiceLoading(true);
     serviceTimes && setServiceTimes(null);
     checkoutResp && setCheckoutResp(null);
-    setSelectedService(item);
+    !staff && getServiceDetails(item);
+    !staff && getServicePeopleItemDetails(item);
+    !staff && setSelectedService(item);
     const date = new Date();
     let day = DAYS[date.getDay()];
     date.setDate(date.getDate() + (DAYS.length - DAYS.indexOf(day)));
 
-    const url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
+    let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
     }&start_date=${new Date().toISOString()}&end_date=${
       date.toISOString().split("T")[0]
     }&time_zone=${timeZone}&only_available=true&duration=${
       item.queue_duration
     }`;
+
+    if (staff) {
+      url = url + "&person_id=" + staff.id;
+    }
 
     const res = await fetch(url, {
       method: "GET",
@@ -115,7 +167,8 @@ const App = () => {
     const serviceTimesResp = await res.json();
     setServiceTimes(serviceTimesResp);
     setStep("service times");
-    createABasket();
+    !staff && createABasket();
+    setServiceLoading(false);
   };
 
   const createABasket = async () => {
@@ -131,13 +184,18 @@ const App = () => {
   };
 
   const addItemIntoBasket = async () => {
+    setServiceLoading(true);
+    let settings: { person?: number } = {};
+    if (selectedStaff) {
+      settings.person = selectedStaff.id;
+    }
     const time = selectedTimeSlot;
     const url = `${API_URL}/api/v5/baskets/${basketInfo.id}/service_items`;
     const data = {
       price: selectedService.prices[0],
       company_id: `${COMPANY_ID}`,
       duration: selectedService.queue_duration,
-      settings: {},
+      settings,
       service_id: selectedService.id,
       time_zone: timeZone,
       start: time,
@@ -153,6 +211,7 @@ const App = () => {
     });
     const addItemBasketResp = await res.json();
     setBasketServiceItem(addItemBasketResp);
+    setServiceLoading(false);
   };
 
   const deleteItemInBasket = async () => {
@@ -170,6 +229,7 @@ const App = () => {
   };
 
   const clientInfoApi = async () => {
+    setServiceLoading(true);
     clientData && setClientDataResp(null);
     const clientInfo = {
       consent: true,
@@ -197,9 +257,11 @@ const App = () => {
     const clientResp = await res.json();
     setClientDataResp(clientResp);
     setStep("verify");
+    setServiceLoading(false);
   };
 
   const checkout = async () => {
+    setServiceLoading(true);
     const url = `${API_URL}/api/v5/baskets/${basketInfo.id}/checkout`;
     const checkoutData = {
       client: clientData,
@@ -216,6 +278,7 @@ const App = () => {
     const checkoutResp = await res.json();
     setCheckoutResp(checkoutResp);
     setStep("confirmation");
+    setServiceLoading(false);
   };
 
   const clearState = () => {
@@ -229,6 +292,8 @@ const App = () => {
     setClientDataResp(null);
     setCheckoutResp(null);
     setUserInfo(UserInitialInfo);
+    setStaff(null);
+    setSelectedStaff(null);
     setStep("welcome");
   };
 
@@ -244,6 +309,7 @@ const App = () => {
           companyId={COMPANY_ID}
           companyName={COMPANY_NAME}
           getServices={getServices}
+          serviceLoading={serviceLoading}
         />
       )}
       {step === "services" && (
@@ -252,6 +318,7 @@ const App = () => {
           serviceTimes={serviceTimes}
           getServiceTimes={getServiceTimes}
           selectedService={selectedService}
+          serviceLoading={serviceLoading}
         />
       )}
       {step === "service times" && (
@@ -266,6 +333,14 @@ const App = () => {
           setStep={setStep}
           setServiceTimes={setServiceTimes}
           setServices={setServices}
+          staffInfo={{
+            staff,
+            selectedStaff,
+            setBasketServiceItem,
+            setSelectedStaff,
+          }}
+          getServiceTimes={getServiceTimes}
+          serviceLoading={serviceLoading}
         />
       )}
       {step === "client details" && (
@@ -273,12 +348,14 @@ const App = () => {
           userInfo={userInfo}
           clientInfoApi={clientInfoApi}
           setUserInfo={setUserInfo}
+          serviceLoading={serviceLoading}
         />
       )}
       {step === "verify" && (
         <Checkout
           checkout={checkout}
           bookingInfo={{ clientData, selectedService, selectedTimeSlot }}
+          serviceLoading={serviceLoading}
         />
       )}
       {step === "confirmation" && (

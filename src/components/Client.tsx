@@ -1,19 +1,27 @@
+import { useEffect } from "react";
 import "../App.css";
 import { UserInfo } from "../App";
+import { Spinner } from "./Spinner";
 
 interface Props {
   userInfo: UserInfo;
   clientInfoApi: () => void;
   setUserInfo: (info: UserInfo) => void;
+  serviceLoading: boolean;
 }
 
 export const ClientDetails: React.FC<Props> = ({
   userInfo,
   clientInfoApi,
   setUserInfo,
+  serviceLoading,
 }) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
   return (
     <div className="ClientContainer">
+      {serviceLoading && <Spinner message="... Submitting user details" />}
       <h5 className="TextCenter">5.Please enter User details.</h5>
       <div className="ClientFormContainer">
         <div className="ClientFormWrapper">
