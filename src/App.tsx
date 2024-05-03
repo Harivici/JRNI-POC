@@ -5,7 +5,7 @@ import { ServiceTimes } from "./components/ServiceTimes";
 import { ClientDetails } from "./components/Client";
 import { Checkout } from "./components/Checkout";
 import { Confirmation } from "./components/Confirmation";
-
+import moment from "moment-timezone";
 import "./App.css";
 // import Vcxlogo from "./assets/Vicinity_Centres_Logo_Large.webp";
 
@@ -59,7 +59,7 @@ const App = () => {
   const [staff, setStaff] = useState<any>(null);
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [serviceLoading, setServiceLoading] = useState(false);
-
+  const [serviceDetails, setServiceDetails] = useState<any>(null);
   useEffect(() => {
     setStep("welcome");
   }, []);
@@ -104,7 +104,8 @@ const App = () => {
       method: "GET",
       headers,
     });
-    await res.json();
+    const serviceDetailsResp = await res.json();
+    setServiceDetails(serviceDetailsResp);
     setServiceLoading(true);
   };
 
@@ -145,13 +146,23 @@ const App = () => {
     !staff && getServicePeopleItemDetails(item);
     !staff && setSelectedService(item);
     const date = new Date();
-    let day = DAYS[date.getDay()];
-    date.setDate(date.getDate() + (DAYS.length - DAYS.indexOf(day)));
+    // let day = DAYS[date.getDay()];
+    // date.setDate(date.getDate() + (DAYS.length - DAYS.indexOf(day)));
+
+    // let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
+    //   item.id
+    // }&start_date=${new Date().toISOString()}&end_date=${
+    //   date.toISOString().split("T")[0]
+    // }&time_zone=${timeZone}&only_available=true&duration=${
+    //   item.queue_duration
+    // }`;
+    const startDate = moment(date).startOf("month");
+    const endDate = moment(date).endOf("month");
 
     let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
-    }&start_date=${new Date().toISOString()}&end_date=${
-      date.toISOString().split("T")[0]
+    }&start_date=${startDate.toISOString()}&end_date=${
+      endDate.toISOString().split("T")[0]
     }&time_zone=${timeZone}&only_available=true&duration=${
       item.queue_duration
     }`;
@@ -198,7 +209,7 @@ const App = () => {
       settings,
       service_id: selectedService.id,
       time_zone: timeZone,
-      start: time,
+      start: time.start,
       questions: [],
     };
     const res = await fetch(url, {
@@ -323,6 +334,7 @@ const App = () => {
       )}
       {step === "service times" && (
         <ServiceTimes
+          serviceTimes={serviceTimes}
           timeSlots={timeSlots}
           setSelectedTimeSlot={setSelectedTimeSlot}
           addItemIntoBasket={addItemIntoBasket}
@@ -341,6 +353,8 @@ const App = () => {
           }}
           getServiceTimes={getServiceTimes}
           serviceLoading={serviceLoading}
+          setServiceLoading={setServiceLoading}
+          serviceDetails={serviceDetails}
         />
       )}
       {step === "client details" && (

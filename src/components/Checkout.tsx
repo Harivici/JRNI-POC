@@ -37,7 +37,7 @@ export const Checkout: React.FC<Props> = ({
           </p>
           <p>
             Time slot:{" "}
-            {new Date(bookingInfo.selectedTimeSlot).toLocaleTimeString()}
+            {new Date(bookingInfo.selectedTimeSlot.start).toLocaleTimeString()}
           </p>
           <p>Email: {bookingInfo.clientData.email}</p>
 
