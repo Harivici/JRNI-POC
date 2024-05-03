@@ -1,5 +1,6 @@
 import "../App.css";
 import { Spinner } from "./Spinner";
+import { useEffect } from "react";
 interface Props {
   companyId: string | undefined;
   companyName: string | undefined;
@@ -13,6 +14,11 @@ export const Landing: React.FC<Props> = ({
   getServices,
   serviceLoading,
 }) => {
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },[])
+
   return (
     <div className="ButtonsContainer">
       <h5>
