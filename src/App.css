@@ -296,7 +296,124 @@ input {
   margin-top: 15px;
   text-align: center;
 }
+.calenderContainer {
+  width: 628px;
+  margin: auto;
+}
+.headingContainer {
+  text-align: center;
+  font-style: normal;
+  line-height: 120%;
+}
+.heading {
+  font-weight: 700;
+}
+.tightContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  line-height: 120%;
+  width: 100%;
+}
+.calender {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+}
+.calenderMonthYear {
+  align-items: baseline;
+  border-bottom: 1px solid #ebebe9;
+  display: flex;
+  font-size: 22px;
+  font-weight: 700;
+  justify-content: center;
+  padding-bottom: 16px;
+  text-align: center;
+  width: 100%;
+}
 
+.calenderKey {
+  color: #9b9b9b;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  height: 48px;
+  margin-left: -1px;
+}
+.calenderCell {
+  align-items: center;
+  color: #9b9b9b;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  font-size: 0.875rem;
+  font-weight: 700;
+  height: 82px;
+  justify-content: center;
+  width: 82px;
+}
+.calenderDay {
+  border: 1px solid #e1dfdc;
+  color: #333333;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: -1px;
+  margin-top: -1px;
+  position: relative;
+}
+.emptyCell {
+  flex-grow: 1;
+  margin-left: -1px;
+  margin-top: -1px;
+}
+.calenderSelected {
+  background: #a48d53;
+  color: #ffffff;
+}
+.calenderDisabled {
+  background-color: #ebebe9;
+  border-color: #e1dfdc;
+  color: #9b9b9b;
+  cursor: default;
+  position: relative;
+  cursor: not-allowed;
+}
+.timeslotsContiner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 120%;
+  /* width: 100%; */
+  width: 628px;
+  margin: auto;
+}
+.timeslot {
+  width: 8.25rem;
+  background: transparent;
+  border: #a48d53 solid 2px;
+  border-radius: 0.1875rem;
+  color: #a48d53;
+  display: inline-block;
+  font-family: Primary, Arial;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  height: 3.125rem;
+  letter-spacing: 2px;
+  line-height: 3rem;
+  padding: 0px 2.25rem;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease-out;
+}
+.selected {
+  background: #a48d53 !important;
+  color: #ffffff !important;
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
