@@ -84,9 +84,7 @@ export const SelectDate: React.FC<Props> = ({
   const selectedFutureMonth = currentMonthNo <= selectedMonthNo - 1;
   const leftArrow = selectedFutureMonth || selectedFutureYear;
 
-  let emptyDays: number[] | null = selectedMonth && [
-    ...Array(selectedMonth.day()).keys(),
-  ];
+  let emptyDays: number[] | null = selectedMonth && [...Array(selectedMonth.day()).keys(),];
   if (emptyDays && emptyDays.length === 0) {
     emptyDays = selectedMonthDays.filter((day) => day <= 6);
   }
