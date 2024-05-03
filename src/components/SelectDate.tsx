@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import moment, { Moment } from "moment-timezone";
 import "../App.css";
 // import { faChevronLeft, faChevronRight } from '@fortawesome/pro-regular-svg-icons'
-
 import { Spinner } from "./Spinner";
 
 interface Props {

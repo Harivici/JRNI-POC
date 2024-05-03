@@ -7,7 +7,6 @@ import { Checkout } from "./components/Checkout";
 import { Confirmation } from "./components/Confirmation";
 import moment from "moment-timezone";
 import "./App.css";
-// import Vcxlogo from "./assets/Vicinity_Centres_Logo_Large.webp";
 
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -60,26 +59,10 @@ const App = () => {
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [serviceLoading, setServiceLoading] = useState(false);
   const [serviceDetails, setServiceDetails] = useState<any>(null);
+
   useEffect(() => {
     setStep("welcome");
   }, []);
-
-  const timeSlots =
-    serviceTimes?.times &&
-    DAYS.map((day, index) => {
-      const slots = serviceTimes.times.filter((time: any) => {
-        const currentDate = new Date(time.start);
-        const currentDay = currentDate.getDay() || DAYS.length;
-        return currentDay === index + 1 ? time : "";
-      });
-      const dateTime = new Date();
-      const currentDay = dateTime.getDay() || DAYS.length;
-      const currentDate = dateTime.getDate();
-      const date = new Date(
-        dateTime.setDate(currentDate - (currentDay - (index + 1)))
-      );
-      return { day, date, slots };
-    });
 
   const getServices = async () => {
     setServiceLoading(true);
@@ -146,22 +129,15 @@ const App = () => {
     !staff && getServicePeopleItemDetails(item);
     !staff && setSelectedService(item);
     const date = new Date();
-    // let day = DAYS[date.getDay()];
-    // date.setDate(date.getDate() + (DAYS.length - DAYS.indexOf(day)));
 
-    // let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
-    //   item.id
-    // }&start_date=${new Date().toISOString()}&end_date=${
-    //   date.toISOString().split("T")[0]
-    // }&time_zone=${timeZone}&only_available=true&duration=${
-    //   item.queue_duration
-    // }`;
     const startDate = moment(date).startOf("month");
     const endDate = moment(date).endOf("month");
 
     let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
-    }&start_date=${startDate.format("YYYY-MM-DD")}T00:00:00.999Z&end_date=${endDate.format(
+    }&start_date=${startDate.format(
+      "YYYY-MM-DD"
+    )}T00:00:00.999Z&end_date=${endDate.format(
       "YYYY-MM-DD"
     )}T23:59:59.999Z&time_zone=${timeZone}&only_available=true&duration=${
       item.queue_duration
@@ -310,7 +286,6 @@ const App = () => {
 
   return (
     <div className="App">
-      {/* <img src={Vcxlogo} alt="Vcx Logo" /> <br /> */}
       <h1 className="H1">{`${
         services ? "" : "Welcome to"
       } ${COMPANY_NAME}(${COMPANY_ID}) JRNI appointments/services`}</h1>
@@ -335,7 +310,6 @@ const App = () => {
       {step === "service times" && (
         <ServiceTimes
           serviceTimes={serviceTimes}
-          timeSlots={timeSlots}
           setSelectedTimeSlot={setSelectedTimeSlot}
           addItemIntoBasket={addItemIntoBasket}
           selectedService={selectedService}
@@ -343,8 +317,6 @@ const App = () => {
           basketServiceItem={basketServiceItem}
           deleteItemInBasket={deleteItemInBasket}
           setStep={setStep}
-          setServiceTimes={setServiceTimes}
-          setServices={setServices}
           staffInfo={{
             staff,
             selectedStaff,
@@ -355,6 +327,7 @@ const App = () => {
           serviceLoading={serviceLoading}
           setServiceLoading={setServiceLoading}
           serviceDetails={serviceDetails}
+          clearState={clearState}
         />
       )}
       {step === "client details" && (
