@@ -161,9 +161,9 @@ const App = () => {
 
     let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
-    }&start_date=${startDate.toISOString()}&end_date=${
-      endDate.toISOString().split("T")[0]
-    }&time_zone=${timeZone}&only_available=true&duration=${
+    }&start_date=${startDate.format("YYYY-MM-DD")}T00:00:00.999Z&end_date=${endDate.format(
+      "YYYY-MM-DD"
+    )}T23:59:59.999Z&time_zone=${timeZone}&only_available=true&duration=${
       item.queue_duration
     }`;
 
@@ -177,8 +177,8 @@ const App = () => {
     });
     const serviceTimesResp = await res.json();
     setServiceTimes(serviceTimesResp);
-    setStep("service times");
-    !staff && createABasket();
+    !basketServiceItem && setStep("service times");
+    !staff && !basketServiceItem && createABasket();
     setServiceLoading(false);
   };
 

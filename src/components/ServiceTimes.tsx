@@ -55,8 +55,8 @@ export const ServiceTimes: React.FC<Props> = ({
   const [message, setMessage] = useState("");
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
   const [selectedDayTimeSlots, setSelectedDayTimeSlots] = useState<any>(null);
-
-  const getDayServiceTimes = async (selectedDate: Moment, staff?: any) => {
+  
+  const getDayServiceTimes = async (selectedDate: Moment) => {
     setServiceLoading(true);
     setSelectedDayTimeSlots(null);
 
@@ -69,9 +69,9 @@ export const ServiceTimes: React.FC<Props> = ({
     )}T23:59:59.999Z&time_zone=${timeZone}&only_available=true&duration=${
       serviceDetails.queue_duration
     }`;
-
-    if (staff) {
-      url = url + "&person_id=" + staff.id;
+    
+    if (staffInfo?.selectedStaff) {
+      url = url + "&person_id=" + staffInfo.selectedStaff.id;
     }
 
     const res = await fetch(url, {
@@ -103,29 +103,41 @@ export const ServiceTimes: React.FC<Props> = ({
         }}
         serviceTimes={serviceTimes}
       />
-      <h5>
-        3.Choose a time slot for
-        <span className="ServiceColor">{` ${selectedService.name} `}</span>
-        service to add into basket:
-      </h5>
-      {selectedDayTimeSlots && (
-        <div className="timeslotsContiner">
-          {selectedDayTimeSlots.times.map((item: any) => {
-            return (
-              <div
-                key={item.start}
-                className={`timeslot ${
-                  item.start === selectedTimeSlot?.start ? "selected" : ""
-                }`}
-                onClick={() => {
-                  setSelectedTimeSlot(item);
-                }}
-              >
-                {moment(item.start).format("h:mma")}
-              </div>
-            );
-          })}
-        </div>
+
+      {selectedDayTimeSlots?.times?.length > 0 ? (
+        <>
+          <h5>
+            3.Choose a time slot for
+            <span className="ServiceColor">{` ${selectedService.name} `}</span>
+            service to add into basket:
+          </h5>
+
+          <div className="timeslotsContiner">
+            {selectedDayTimeSlots.times.map((item: any) => {
+              return (
+                <div
+                  key={item.start}
+                  className={`timeslot ${
+                    item.start === selectedTimeSlot?.start ? "selected" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedTimeSlot(item);
+                  }}
+                >
+                  {moment(item.start).format("h:mma")}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        selectedDayTimeSlots?.times?.length === 0 && (
+          <div>
+            {" "}
+            Sorry no time slots for{" "}
+            {staffInfo?.selectedStaff?.name || "Any one"}
+          </div>
+        )
       )}
       {/* {timeSlots &&
         timeSlots.map((slot: any) => {
