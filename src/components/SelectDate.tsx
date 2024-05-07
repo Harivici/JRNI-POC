@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from "react";
 import moment, { Moment } from "moment-timezone";
 import "../App.css";
-// import { faChevronLeft, faChevronRight } from '@fortawesome/pro-regular-svg-icons'
 import { Spinner } from "./Spinner";
 
 interface Props {
   serviceTimes: any;
   selectedDate: Moment | null;
   onChange: (date: Moment) => void;
+  setSelectedDate: (val: any) => void;
+  setSelectedDayTimeSlots: (val: any) => void;
+  getServiceTimes: (val1: any, val2?: any, val3?: any) => void;
+  selectedService: any;
 }
+
 const DATE_FORMAT = "YYYY-MM-DD";
 export const SelectDate: React.FC<Props> = ({
   selectedDate,
   onChange,
   serviceTimes,
+  setSelectedDate,
+  setSelectedDayTimeSlots,
+  getServiceTimes,
+  selectedService,
 }) => {
   const [selectedMonth, setSelectedMonth] = useState<Moment | null>(null);
   const [serviceDays, setServiceDays] = useState<any>(null);
   const [error, setError] = useState("");
+  // console.log('selectedMonth', selectedMonth, selectedService)
 
   useEffect(() => {
     setSelectedMonth(null);
     setServiceDays(null);
-    const startOf = serviceTimes.times?.[0].start;
+    const startOf = serviceTimes.times?.[0]?.start;
     const getFirstDay = async () => {
       setSelectedMonth(moment(startOf).startOf("month"));
     };
@@ -30,6 +39,7 @@ export const SelectDate: React.FC<Props> = ({
     getFirstDay().catch((e) => {
       setError("");
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   moment.updateLocale("en", {
@@ -38,6 +48,8 @@ export const SelectDate: React.FC<Props> = ({
 
   useEffect(() => {
     setServiceDays(null);
+    setSelectedDate(null);
+    setSelectedDayTimeSlots(null);
     if (!selectedMonth) {
       return;
     }
@@ -60,6 +72,7 @@ export const SelectDate: React.FC<Props> = ({
             },
           ];
         }
+        return "";
       });
       setServiceDays(serviceDaysObj);
     };
@@ -67,7 +80,8 @@ export const SelectDate: React.FC<Props> = ({
     getTimeMatrix().catch((e) => {
       setError("");
     });
-  }, [selectedMonth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMonth, serviceTimes]);
 
   const currentYearNo = parseInt(moment().format("Y"), 10);
   const currentMonth = moment().format("M");
@@ -83,7 +97,9 @@ export const SelectDate: React.FC<Props> = ({
   const selectedFutureMonth = currentMonthNo <= selectedMonthNo - 1;
   const leftArrow = selectedFutureMonth || selectedFutureYear;
 
-  let emptyDays: number[] | null = selectedMonth && [...Array(selectedMonth.day()).keys(),];
+  let emptyDays: number[] | null = selectedMonth && [
+    ...Array(selectedMonth.day()).keys(),
+  ];
   if (emptyDays && emptyDays.length === 0) {
     emptyDays = selectedMonthDays.filter((day) => day <= 6);
   }
@@ -118,21 +134,67 @@ export const SelectDate: React.FC<Props> = ({
         <div className="tightContainer">
           <div className="calender">
             <div className="calenderMonthYear">
-              {/* <div
+              <div
                 onClick={() => {
                   if (leftArrow) {
-                    setSelectedMonth(selectedMonth.clone().add(-1, 'month'))
+                    const current = new Date(
+                      selectedMonth.format("YYYY-MM-DD")
+                    );
+                    current.setMonth(current.getMonth() - 1);
+
+                    getServiceTimes(selectedService, "", current);
+                    setSelectedMonth(selectedMonth.clone().add(-1, "month"));
                   }
                 }}
               >
-                {leftArrow && <Icon icon={faChevronLeft} className={styles.icon} />}
-              </div> */}
+                {leftArrow && (
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="far"
+                    data-icon="chevron-left"
+                    className="svg-inline--fa fa-chevron-left fa-w-8 icon"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M231.293 473.899l19.799-19.799c4.686-4.686 4.686-12.284 0-16.971L70.393 256 251.092 74.87c4.686-4.686 4.686-12.284 0-16.971L231.293 38.1c-4.686-4.686-12.284-4.686-16.971 0L4.908 247.515c-4.686 4.686-4.686 12.284 0 16.971L214.322 473.9c4.687 4.686 12.285 4.686 16.971-.001z"
+                    ></path>
+                  </svg>
+                )}
+              </div>
               <div className="headingContainer">
                 <h4 className="heading">{selectedMonth.format("MMMM YYYY")}</h4>
               </div>
-              {/* <div onClick={() => setSelectedMonth(selectedMonth.clone().add(1, 'month'))}>
-                {rightArrow && <Icon icon={faChevronRight} className={styles.icon} />}
-              </div> */}
+              <div
+                onClick={() => {
+                  const current = new Date(selectedMonth.format("YYYY-MM-DD"));
+                  current.setMonth(current.getMonth() + 1);
+                  getServiceTimes(selectedService, "", current);
+                  setSelectedMonth(selectedMonth.clone().add(1, "month"));
+                }}
+              >
+                {
+                  /*rightArrow && */
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="far"
+                    data-icon="chevron-right"
+                    className="svg-inline--fa fa-chevron-right fa-w-8 icon icon_f14nogtc"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M24.707 38.101L4.908 57.899c-4.686 4.686-4.686 12.284 0 16.971L185.607 256 4.908 437.13c-4.686 4.686-4.686 12.284 0 16.971L24.707 473.9c4.686 4.686 12.284 4.686 16.971 0l209.414-209.414c4.686-4.686 4.686-12.284 0-16.971L41.678 38.101c-4.687-4.687-12.285-4.687-16.971 0z"
+                    ></path>
+                  </svg>
+                }
+              </div>
             </div>
             {moment.weekdays(true).map((day) => (
               <div key={day} className="calenderCell calenderKey">
@@ -151,23 +213,6 @@ export const SelectDate: React.FC<Props> = ({
                 serviceDays[
                   selectedMonth.clone().date(day).format(DATE_FORMAT)
                 ];
-
-              // const eventsDayArr = Object.keys(serviceDays)
-              // const isEventWithinDate = eventsDayArr.includes(
-              //   selectedMonth
-              //     .clone()
-              //     .date(day)
-              //     .format(DATE_FORMAT)
-              // )
-              // const saleStatus = dayMatrix?.find((item: { saleStatus: string }) =>
-              //   ['onSale', 'planned'].includes(item.saleStatus)
-              // )
-              // const limitedSpot = dayMatrix?.find((item: { availabilityIndicator: string }) =>
-              //   ['green', 'yellow'].includes(item.availabilityIndicator)
-              // )
-              // const isaAvailabilityIndicatorExist = dayMatrix?.find(
-              //   (item: { availabilityIndicator: string }) => item.availabilityIndicator
-              // )
               const disabled = !dayMatrix || dayMatrix.length === 0;
               return (
                 <React.Fragment key={day}>
@@ -182,15 +227,10 @@ export const SelectDate: React.FC<Props> = ({
                             : ""
                         } 
                           ${disabled ? "calenderDisabled" : ""}`}
-                    // [styles.diagonalLine]: !saleStatus && isEventWithinDate
-                    // })}
                     onClick={() =>
                       !disabled && onChange(selectedMonth.clone().date(day))
                     }
                   >
-                    {/* {isaAvailabilityIndicatorExist && !limitedSpot && isEventWithinDate && saleStatus && (
-                      <div className={styles.diamondGradient} />
-                    )} */}
                     {day}
                   </div>
                 </React.Fragment>

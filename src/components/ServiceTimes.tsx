@@ -30,6 +30,7 @@ interface Props {
   setServiceLoading: (val: any) => void;
   serviceDetails: any;
   clearState: () => void;
+  basketInfo: any;
 }
 
 export const ServiceTimes: React.FC<Props> = ({
@@ -47,6 +48,7 @@ export const ServiceTimes: React.FC<Props> = ({
   setServiceLoading,
   serviceDetails,
   clearState,
+  basketInfo,
 }) => {
   const [message, setMessage] = useState("");
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
@@ -85,7 +87,7 @@ export const ServiceTimes: React.FC<Props> = ({
 
   return (
     <div className="ServiceTimesContainer">
-      {serviceLoading && <Spinner message={message} />}
+      {serviceLoading && !basketInfo && <Spinner message={message} />}
       {staffInfo.staff?.length > 0 && (
         <Staff
           selectedService={selectedService}
@@ -103,10 +105,14 @@ export const ServiceTimes: React.FC<Props> = ({
           setSelectedDate(date);
           getDayServiceTimes(date);
         }}
+        selectedService={selectedService}
         serviceTimes={serviceTimes}
+        setSelectedDate={setSelectedDate}
+        setSelectedDayTimeSlots={setSelectedDayTimeSlots}
+        getServiceTimes={getServiceTimes}
       />
 
-      {selectedDayTimeSlots?.times?.length > 0 ? (
+      {selectedDate && selectedDayTimeSlots?.times?.length > 0 ? (
         <>
           <hr className="StaffSection" />
           <h3>

@@ -20,15 +20,15 @@ const headers = {
   "App-Id": `${APP_ID}`,
 };
 
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+// const DAYS = [
+//   "Monday",
+//   "Tuesday",
+//   "Wednesday",
+//   "Thursday",
+//   "Friday",
+//   "Saturday",
+//   "Sunday",
+// ];
 export interface UserInfo {
   email: string;
   firstName: string;
@@ -121,17 +121,24 @@ const App = () => {
     return servicePeopleDetailsResp;
   };
 
-  const getServiceTimes = async (item: any, staff?: any) => {
+  const getServiceTimes = async (
+    item: any,
+    staff?: any,
+    monthSelected?: any
+  ) => {
+    // console.log('month selected', monthSelected)
     setServiceLoading(true);
     serviceTimes && setServiceTimes(null);
     checkoutResp && setCheckoutResp(null);
-    !staff && getServiceDetails(item);
-    !staff && getServicePeopleItemDetails(item);
-    !staff && setSelectedService(item);
+    !staff && !monthSelected && getServiceDetails(item);
+    !staff && !monthSelected && getServicePeopleItemDetails(item);
+    !staff && !monthSelected && setSelectedService(item);
     const date = new Date();
 
-    const startDate = moment(date).startOf("month");
-    const endDate = moment(date).endOf("month");
+    const startDate = moment(monthSelected ? monthSelected : date).startOf(
+      "month"
+    );
+    const endDate = moment(monthSelected ? monthSelected : date).endOf("month");
 
     let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
@@ -154,8 +161,8 @@ const App = () => {
     const serviceTimesResp = await res.json();
     setServiceTimes(serviceTimesResp);
     !basketServiceItem && setStep("service times");
-    !staff && !basketServiceItem && createABasket();
-    setServiceLoading(false);
+    !staff && !basketInfo && createABasket();
+    !basketInfo && setServiceLoading(false);
   };
 
   const createABasket = async () => {
@@ -328,6 +335,7 @@ const App = () => {
           setServiceLoading={setServiceLoading}
           serviceDetails={serviceDetails}
           clearState={clearState}
+          basketInfo={basketInfo}
         />
       )}
       {step === "client details" && (

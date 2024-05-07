@@ -327,7 +327,7 @@ input {
   display: flex;
   font-size: 22px;
   font-weight: 700;
-  justify-content: center;
+  justify-content: space-between;
   padding-bottom: 16px;
   text-align: center;
   width: 100%;
@@ -378,6 +378,15 @@ input {
   cursor: default;
   position: relative;
   cursor: not-allowed;
+}
+.icon {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  transition: none !important;
+  width: 0.7rem;
 }
 .timeslotsContiner {
   display: flex;
