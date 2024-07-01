@@ -26,7 +26,6 @@ export const SelectDate: React.FC<Props> = ({
   const [selectedMonth, setSelectedMonth] = useState<Moment | null>(null);
   const [serviceDays, setServiceDays] = useState<any>(null);
   const [error, setError] = useState("");
-  // console.log('selectedMonth', selectedMonth, selectedService)
 
   useEffect(() => {
     setSelectedMonth(null);

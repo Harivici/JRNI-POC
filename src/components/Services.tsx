@@ -1,5 +1,6 @@
 import "../App.css";
 import { Spinner } from "./Spinner";
+import { Service } from "./Service";
 interface Props {
   services: any;
   serviceTimes: any;
@@ -24,37 +25,7 @@ export const Services: React.FC<Props> = ({
       {!serviceTimes &&
         services?._embedded.services.map((item: any) => {
           return (
-            <div
-              className="ServiceDiv"
-              style={{
-                background:
-                  selectedService && item.name === selectedService.name
-                    ? "#a48d53"
-                    : "",
-              }}
-              key={item.name}
-              onClick={() => getServiceTimes(item)}
-            >
-              <img
-                src="https://a.storyblok.com/f/133553/652x481/8a372130e0/aje__freshabake__lny_kokocapture.jpg/m/520x340"
-                alt="service"
-                height={170}
-              />
-              <h4 className="ServiceDuration">
-                {item.queue_duration / 60} hour
-              </h4>
-              <div
-                className="ServiceItem"
-                style={{
-                  color:
-                    selectedService && item.name === selectedService.name
-                      ? "white"
-                      : "",
-                }}
-              >
-                {item.name}
-              </div>
-            </div>
+            <Service key={item.id} service={item}  selectedService={selectedService} getServiceTimes={getServiceTimes}/>
           );
         })}
     </div>

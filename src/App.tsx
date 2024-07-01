@@ -15,7 +15,7 @@ const COMPANY_ID = process.env.REACT_APP_COMPANY_ID;
 const COMPANY_NAME = process.env.REACT_APP_COMPANY_NAME;
 const APP_ID = process.env.REACT_APP_APP_ID;
 
-const headers = {
+export const headers = {
   "Content-Type": "application/json",
   "App-Id": `${APP_ID}`,
 };
@@ -75,9 +75,11 @@ const App = () => {
     });
     const serviceResp = await res.json();
     setServices(serviceResp);
-    setStep("services");
     setSelectedService(null);
     setServiceLoading(false);
+    // setTimeout(() => {
+      setStep("services");
+    // }, 3000);
   };
 
   const getServiceDetails = async (item: any) => {
@@ -126,7 +128,7 @@ const App = () => {
     staff?: any,
     monthSelected?: any
   ) => {
-    // console.log('month selected', monthSelected)
+    
     setServiceLoading(true);
     serviceTimes && setServiceTimes(null);
     checkoutResp && setCheckoutResp(null);
