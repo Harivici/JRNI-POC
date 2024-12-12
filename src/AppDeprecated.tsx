@@ -36,7 +36,6 @@ const AppDeprecated = () => {
 
   const getServiceTimes = async (item: any) => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("item", item);
     times && setTimes(null);
     checkoutResp && setCheckoutResp(null)
     setSelectedService(item);
@@ -63,7 +62,6 @@ const AppDeprecated = () => {
   };
 
   const addItemIntoBasket = async (time: any) => {
-    console.log("time", time);
     setAuthToken(null);
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const data = {
@@ -128,7 +126,7 @@ const AppDeprecated = () => {
       }
     );
     const clientResp = await res.json();
-    console.log("clientResp", clientResp);
+    
     setClientDataResp(clientResp);
   };
   const checkout = async () => {
@@ -271,7 +269,7 @@ const AppDeprecated = () => {
                   return  time
                 }
               })
-              console.log('dayFilters', dayFilters)
+              
               return  (<div key={day}>
               <label
               htmlFor="time-select"

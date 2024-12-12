@@ -1,11 +1,14 @@
 import "../App.css";
 import userIcon from "../assets/user-icon.jpg";
+import { Moment } from "moment-timezone";
 interface Props {
+  selectedDate: Moment | null
   staffInfo: any;
   selectedService: any;
   getServiceTimes: (val: any, staff: any) => void;
   setSelectedTimeSlot: (val: any) => void;
   setMessage: (val: string) => void;
+  getDayServiceTimes: (val: any, item?:any) => void
 }
 
 export const Staff: React.FC<Props> = ({
@@ -14,6 +17,8 @@ export const Staff: React.FC<Props> = ({
   getServiceTimes,
   setSelectedTimeSlot,
   setMessage,
+  selectedDate,
+  getDayServiceTimes
 }) => {
   return (
     <>
@@ -35,6 +40,7 @@ export const Staff: React.FC<Props> = ({
                 getServiceTimes(selectedService, item);
                 staffInfo.setBasketServiceItem(null);
                 setSelectedTimeSlot(null);
+                selectedDate && getDayServiceTimes(selectedDate, item);
               }}
             >
               <img src={userIcon} alt="user Icon" />
@@ -53,6 +59,8 @@ export const Staff: React.FC<Props> = ({
             staffInfo.setSelectedStaff(null);
             setMessage(`... Loading Any one time slots`);
             getServiceTimes(selectedService, null);
+            setSelectedTimeSlot(null);
+            selectedDate && getDayServiceTimes(selectedDate,'anyone');
           }}
         >
           <img src={userIcon} alt="user Icon" />

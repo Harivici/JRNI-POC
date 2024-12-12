@@ -5,9 +5,8 @@ import { ServiceTimes } from "./components/ServiceTimes";
 import { ClientDetails } from "./components/Client";
 import { Checkout } from "./components/Checkout";
 import { Confirmation } from "./components/Confirmation";
-
+import moment from "moment-timezone";
 import "./App.css";
-// import Vcxlogo from "./assets/Vicinity_Centres_Logo_Large.webp";
 
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -16,20 +15,20 @@ const COMPANY_ID = process.env.REACT_APP_COMPANY_ID;
 const COMPANY_NAME = process.env.REACT_APP_COMPANY_NAME;
 const APP_ID = process.env.REACT_APP_APP_ID;
 
-const headers = {
+export const headers = {
   "Content-Type": "application/json",
   "App-Id": `${APP_ID}`,
 };
 
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+// const DAYS = [
+//   "Monday",
+//   "Tuesday",
+//   "Wednesday",
+//   "Thursday",
+//   "Friday",
+//   "Saturday",
+//   "Sunday",
+// ];
 export interface UserInfo {
   email: string;
   firstName: string;
@@ -59,27 +58,11 @@ const App = () => {
   const [staff, setStaff] = useState<any>(null);
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [serviceLoading, setServiceLoading] = useState(false);
+  const [serviceDetails, setServiceDetails] = useState<any>(null);
 
   useEffect(() => {
     setStep("welcome");
   }, []);
-
-  const timeSlots =
-    serviceTimes?.times &&
-    DAYS.map((day, index) => {
-      const slots = serviceTimes.times.filter((time: any) => {
-        const currentDate = new Date(time.start);
-        const currentDay = currentDate.getDay() || DAYS.length;
-        return currentDay === index + 1 ? time : "";
-      });
-      const dateTime = new Date();
-      const currentDay = dateTime.getDay() || DAYS.length;
-      const currentDate = dateTime.getDate();
-      const date = new Date(
-        dateTime.setDate(currentDate - (currentDay - (index + 1)))
-      );
-      return { day, date, slots };
-    });
 
   const getServices = async () => {
     setServiceLoading(true);
@@ -92,9 +75,11 @@ const App = () => {
     });
     const serviceResp = await res.json();
     setServices(serviceResp);
-    setStep("services");
     setSelectedService(null);
     setServiceLoading(false);
+    // setTimeout(() => {
+      setStep("services");
+    // }, 3000);
   };
 
   const getServiceDetails = async (item: any) => {
@@ -104,7 +89,8 @@ const App = () => {
       method: "GET",
       headers,
     });
-    await res.json();
+    const serviceDetailsResp = await res.json();
+    setServiceDetails(serviceDetailsResp);
     setServiceLoading(true);
   };
 
@@ -137,22 +123,32 @@ const App = () => {
     return servicePeopleDetailsResp;
   };
 
-  const getServiceTimes = async (item: any, staff?: any) => {
+  const getServiceTimes = async (
+    item: any,
+    staff?: any,
+    monthSelected?: any
+  ) => {
+    
     setServiceLoading(true);
     serviceTimes && setServiceTimes(null);
     checkoutResp && setCheckoutResp(null);
-    !staff && getServiceDetails(item);
-    !staff && getServicePeopleItemDetails(item);
-    !staff && setSelectedService(item);
+    !staff && !monthSelected && getServiceDetails(item);
+    !staff && !monthSelected && getServicePeopleItemDetails(item);
+    !staff && !monthSelected && setSelectedService(item);
     const date = new Date();
-    let day = DAYS[date.getDay()];
-    date.setDate(date.getDate() + (DAYS.length - DAYS.indexOf(day)));
+
+    const startDate = moment(monthSelected ? monthSelected : date).startOf(
+      "month"
+    );
+    const endDate = moment(monthSelected ? monthSelected : date).endOf("month");
 
     let url = `${API_URL}/api/v5/${COMPANY_ID}/times?service_id=${
       item.id
-    }&start_date=${new Date().toISOString()}&end_date=${
-      date.toISOString().split("T")[0]
-    }&time_zone=${timeZone}&only_available=true&duration=${
+    }&start_date=${startDate.format(
+      "YYYY-MM-DD"
+    )}T00:00:00.999Z&end_date=${endDate.format(
+      "YYYY-MM-DD"
+    )}T23:59:59.999Z&time_zone=${timeZone}&only_available=true&duration=${
       item.queue_duration
     }`;
 
@@ -166,9 +162,9 @@ const App = () => {
     });
     const serviceTimesResp = await res.json();
     setServiceTimes(serviceTimesResp);
-    setStep("service times");
-    !staff && createABasket();
-    setServiceLoading(false);
+    !basketServiceItem && setStep("service times");
+    !staff && !basketInfo && createABasket();
+    !basketInfo && setServiceLoading(false);
   };
 
   const createABasket = async () => {
@@ -198,7 +194,7 @@ const App = () => {
       settings,
       service_id: selectedService.id,
       time_zone: timeZone,
-      start: time,
+      start: time.start,
       questions: [],
     };
     const res = await fetch(url, {
@@ -299,7 +295,6 @@ const App = () => {
 
   return (
     <div className="App">
-      {/* <img src={Vcxlogo} alt="Vcx Logo" /> <br /> */}
       <h1 className="H1">{`${
         services ? "" : "Welcome to"
       } ${COMPANY_NAME}(${COMPANY_ID}) JRNI appointments/services`}</h1>
@@ -323,7 +318,7 @@ const App = () => {
       )}
       {step === "service times" && (
         <ServiceTimes
-          timeSlots={timeSlots}
+          serviceTimes={serviceTimes}
           setSelectedTimeSlot={setSelectedTimeSlot}
           addItemIntoBasket={addItemIntoBasket}
           selectedService={selectedService}
@@ -331,8 +326,6 @@ const App = () => {
           basketServiceItem={basketServiceItem}
           deleteItemInBasket={deleteItemInBasket}
           setStep={setStep}
-          setServiceTimes={setServiceTimes}
-          setServices={setServices}
           staffInfo={{
             staff,
             selectedStaff,
@@ -341,6 +334,10 @@ const App = () => {
           }}
           getServiceTimes={getServiceTimes}
           serviceLoading={serviceLoading}
+          setServiceLoading={setServiceLoading}
+          serviceDetails={serviceDetails}
+          clearState={clearState}
+          basketInfo={basketInfo}
         />
       )}
       {step === "client details" && (
